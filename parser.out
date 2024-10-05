@@ -1,0 +1,182 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> Z
+Rule 1     Z -> Sexp
+Rule 2     Sexp -> ( + Lista )
+Rule 3     Sexp -> ( * Lista )
+Rule 4     Sexp -> num
+Rule 5     Lista -> Lista Sexp
+Rule 6     Lista -> Sexp Sexp
+
+Terminals, with rules where they appear
+
+(                    : 2 3
+)                    : 2 3
+*                    : 3
++                    : 2
+error                : 
+num                  : 4
+
+Nonterminals, with rules where they appear
+
+Lista                : 2 3 5
+Sexp                 : 1 5 6 6
+Z                    : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . Z
+    (1) Z -> . Sexp
+    (2) Sexp -> . ( + Lista )
+    (3) Sexp -> . ( * Lista )
+    (4) Sexp -> . num
+
+    (               shift and go to state 3
+    num             shift and go to state 4
+
+    Z                              shift and go to state 1
+    Sexp                           shift and go to state 2
+
+state 1
+
+    (0) S' -> Z .
+
+
+
+state 2
+
+    (1) Z -> Sexp .
+
+    $end            reduce using rule 1 (Z -> Sexp .)
+
+
+state 3
+
+    (2) Sexp -> ( . + Lista )
+    (3) Sexp -> ( . * Lista )
+
+    +               shift and go to state 5
+    *               shift and go to state 6
+
+
+state 4
+
+    (4) Sexp -> num .
+
+    $end            reduce using rule 4 (Sexp -> num .)
+    (               reduce using rule 4 (Sexp -> num .)
+    num             reduce using rule 4 (Sexp -> num .)
+    )               reduce using rule 4 (Sexp -> num .)
+
+
+state 5
+
+    (2) Sexp -> ( + . Lista )
+    (5) Lista -> . Lista Sexp
+    (6) Lista -> . Sexp Sexp
+    (2) Sexp -> . ( + Lista )
+    (3) Sexp -> . ( * Lista )
+    (4) Sexp -> . num
+
+    (               shift and go to state 3
+    num             shift and go to state 4
+
+    Lista                          shift and go to state 7
+    Sexp                           shift and go to state 8
+
+state 6
+
+    (3) Sexp -> ( * . Lista )
+    (5) Lista -> . Lista Sexp
+    (6) Lista -> . Sexp Sexp
+    (2) Sexp -> . ( + Lista )
+    (3) Sexp -> . ( * Lista )
+    (4) Sexp -> . num
+
+    (               shift and go to state 3
+    num             shift and go to state 4
+
+    Lista                          shift and go to state 9
+    Sexp                           shift and go to state 8
+
+state 7
+
+    (2) Sexp -> ( + Lista . )
+    (5) Lista -> Lista . Sexp
+    (2) Sexp -> . ( + Lista )
+    (3) Sexp -> . ( * Lista )
+    (4) Sexp -> . num
+
+    )               shift and go to state 10
+    (               shift and go to state 3
+    num             shift and go to state 4
+
+    Sexp                           shift and go to state 11
+
+state 8
+
+    (6) Lista -> Sexp . Sexp
+    (2) Sexp -> . ( + Lista )
+    (3) Sexp -> . ( * Lista )
+    (4) Sexp -> . num
+
+    (               shift and go to state 3
+    num             shift and go to state 4
+
+    Sexp                           shift and go to state 12
+
+state 9
+
+    (3) Sexp -> ( * Lista . )
+    (5) Lista -> Lista . Sexp
+    (2) Sexp -> . ( + Lista )
+    (3) Sexp -> . ( * Lista )
+    (4) Sexp -> . num
+
+    )               shift and go to state 13
+    (               shift and go to state 3
+    num             shift and go to state 4
+
+    Sexp                           shift and go to state 11
+
+state 10
+
+    (2) Sexp -> ( + Lista ) .
+
+    $end            reduce using rule 2 (Sexp -> ( + Lista ) .)
+    (               reduce using rule 2 (Sexp -> ( + Lista ) .)
+    num             reduce using rule 2 (Sexp -> ( + Lista ) .)
+    )               reduce using rule 2 (Sexp -> ( + Lista ) .)
+
+
+state 11
+
+    (5) Lista -> Lista Sexp .
+
+    )               reduce using rule 5 (Lista -> Lista Sexp .)
+    (               reduce using rule 5 (Lista -> Lista Sexp .)
+    num             reduce using rule 5 (Lista -> Lista Sexp .)
+
+
+state 12
+
+    (6) Lista -> Sexp Sexp .
+
+    )               reduce using rule 6 (Lista -> Sexp Sexp .)
+    (               reduce using rule 6 (Lista -> Sexp Sexp .)
+    num             reduce using rule 6 (Lista -> Sexp Sexp .)
+
+
+state 13
+
+    (3) Sexp -> ( * Lista ) .
+
+    $end            reduce using rule 3 (Sexp -> ( * Lista ) .)
+    (               reduce using rule 3 (Sexp -> ( * Lista ) .)
+    num             reduce using rule 3 (Sexp -> ( * Lista ) .)
+    )               reduce using rule 3 (Sexp -> ( * Lista ) .)
+

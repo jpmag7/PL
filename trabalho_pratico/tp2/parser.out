@@ -1,0 +1,523 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> Z
+Rule 1     Z -> Init
+Rule 2     Init -> Cod
+Rule 3     Init -> COMMENT
+Rule 4     Init -> Cod COMMENT
+Rule 5     Init -> <empty>
+Rule 6     Cod -> Lex
+Rule 7     Cod -> Yacc
+Rule 8     Cod -> Python
+Rule 9     Lex -> LEXSTART
+Rule 10    Lex -> % LITERALS = STRING
+Rule 11    Lex -> % IGNORE = STRING
+Rule 12    Lex -> % TOKENS = LISTA
+Rule 13    Lex -> % STATES = LISTA
+Rule 14    Lex -> % RESERVED = DICIONARY
+Rule 15    Lex -> STRING RETURN ( ID , CODE )
+Rule 16    Lex -> LEXERROR ( STRING , CODE )
+Rule 17    Yacc -> YACCSTART
+Rule 18    Yacc -> % PRECEDENCE = LISTA
+Rule 19    Yacc -> ID PRODUCTION CODE
+Rule 20    Yacc -> VARIABLE
+Rule 21    Yacc -> YACCERROR ( STRING , CODE )
+Rule 22    Python -> PYTHON
+Rule 23    Python -> LINE
+
+Terminals, with rules where they appear
+
+%                    : 10 11 12 13 14 18
+(                    : 15 16 21
+)                    : 15 16 21
+,                    : 15 16 21
+=                    : 10 11 12 13 14 18
+CODE                 : 15 16 19 21
+COMMENT              : 3 4
+DICIONARY            : 14
+ID                   : 15 19
+IGNORE               : 11
+LEXERROR             : 16
+LEXSTART             : 9
+LINE                 : 23
+LISTA                : 12 13 18
+LITERALS             : 10
+PRECEDENCE           : 18
+PRODUCTION           : 19
+PYTHON               : 22
+RESERVED             : 14
+RETURN               : 15
+STATES               : 13
+STRING               : 10 11 15 16 21
+TOKENS               : 12
+VARIABLE             : 20
+YACCERROR            : 21
+YACCSTART            : 17
+error                : 
+
+Nonterminals, with rules where they appear
+
+Cod                  : 2 4
+Init                 : 1
+Lex                  : 6
+Python               : 8
+Yacc                 : 7
+Z                    : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . Z
+    (1) Z -> . Init
+    (2) Init -> . Cod
+    (3) Init -> . COMMENT
+    (4) Init -> . Cod COMMENT
+    (5) Init -> .
+    (6) Cod -> . Lex
+    (7) Cod -> . Yacc
+    (8) Cod -> . Python
+    (9) Lex -> . LEXSTART
+    (10) Lex -> . % LITERALS = STRING
+    (11) Lex -> . % IGNORE = STRING
+    (12) Lex -> . % TOKENS = LISTA
+    (13) Lex -> . % STATES = LISTA
+    (14) Lex -> . % RESERVED = DICIONARY
+    (15) Lex -> . STRING RETURN ( ID , CODE )
+    (16) Lex -> . LEXERROR ( STRING , CODE )
+    (17) Yacc -> . YACCSTART
+    (18) Yacc -> . % PRECEDENCE = LISTA
+    (19) Yacc -> . ID PRODUCTION CODE
+    (20) Yacc -> . VARIABLE
+    (21) Yacc -> . YACCERROR ( STRING , CODE )
+    (22) Python -> . PYTHON
+    (23) Python -> . LINE
+
+    COMMENT         shift and go to state 4
+    $end            reduce using rule 5 (Init -> .)
+    LEXSTART        shift and go to state 8
+    %               shift and go to state 9
+    STRING          shift and go to state 10
+    LEXERROR        shift and go to state 12
+    YACCSTART       shift and go to state 13
+    ID              shift and go to state 11
+    VARIABLE        shift and go to state 14
+    YACCERROR       shift and go to state 15
+    PYTHON          shift and go to state 16
+    LINE            shift and go to state 17
+
+    Z                              shift and go to state 1
+    Init                           shift and go to state 2
+    Cod                            shift and go to state 3
+    Lex                            shift and go to state 5
+    Yacc                           shift and go to state 6
+    Python                         shift and go to state 7
+
+state 1
+
+    (0) S' -> Z .
+
+
+
+state 2
+
+    (1) Z -> Init .
+
+    $end            reduce using rule 1 (Z -> Init .)
+
+
+state 3
+
+    (2) Init -> Cod .
+    (4) Init -> Cod . COMMENT
+
+    $end            reduce using rule 2 (Init -> Cod .)
+    COMMENT         shift and go to state 18
+
+
+state 4
+
+    (3) Init -> COMMENT .
+
+    $end            reduce using rule 3 (Init -> COMMENT .)
+
+
+state 5
+
+    (6) Cod -> Lex .
+
+    COMMENT         reduce using rule 6 (Cod -> Lex .)
+    $end            reduce using rule 6 (Cod -> Lex .)
+
+
+state 6
+
+    (7) Cod -> Yacc .
+
+    COMMENT         reduce using rule 7 (Cod -> Yacc .)
+    $end            reduce using rule 7 (Cod -> Yacc .)
+
+
+state 7
+
+    (8) Cod -> Python .
+
+    COMMENT         reduce using rule 8 (Cod -> Python .)
+    $end            reduce using rule 8 (Cod -> Python .)
+
+
+state 8
+
+    (9) Lex -> LEXSTART .
+
+    COMMENT         reduce using rule 9 (Lex -> LEXSTART .)
+    $end            reduce using rule 9 (Lex -> LEXSTART .)
+
+
+state 9
+
+    (10) Lex -> % . LITERALS = STRING
+    (11) Lex -> % . IGNORE = STRING
+    (12) Lex -> % . TOKENS = LISTA
+    (13) Lex -> % . STATES = LISTA
+    (14) Lex -> % . RESERVED = DICIONARY
+    (18) Yacc -> % . PRECEDENCE = LISTA
+
+    LITERALS        shift and go to state 19
+    IGNORE          shift and go to state 20
+    TOKENS          shift and go to state 21
+    STATES          shift and go to state 22
+    RESERVED        shift and go to state 23
+    PRECEDENCE      shift and go to state 24
+
+
+state 10
+
+    (15) Lex -> STRING . RETURN ( ID , CODE )
+
+    RETURN          shift and go to state 25
+
+
+state 11
+
+    (19) Yacc -> ID . PRODUCTION CODE
+
+    PRODUCTION      shift and go to state 26
+
+
+state 12
+
+    (16) Lex -> LEXERROR . ( STRING , CODE )
+
+    (               shift and go to state 27
+
+
+state 13
+
+    (17) Yacc -> YACCSTART .
+
+    COMMENT         reduce using rule 17 (Yacc -> YACCSTART .)
+    $end            reduce using rule 17 (Yacc -> YACCSTART .)
+
+
+state 14
+
+    (20) Yacc -> VARIABLE .
+
+    COMMENT         reduce using rule 20 (Yacc -> VARIABLE .)
+    $end            reduce using rule 20 (Yacc -> VARIABLE .)
+
+
+state 15
+
+    (21) Yacc -> YACCERROR . ( STRING , CODE )
+
+    (               shift and go to state 28
+
+
+state 16
+
+    (22) Python -> PYTHON .
+
+    COMMENT         reduce using rule 22 (Python -> PYTHON .)
+    $end            reduce using rule 22 (Python -> PYTHON .)
+
+
+state 17
+
+    (23) Python -> LINE .
+
+    COMMENT         reduce using rule 23 (Python -> LINE .)
+    $end            reduce using rule 23 (Python -> LINE .)
+
+
+state 18
+
+    (4) Init -> Cod COMMENT .
+
+    $end            reduce using rule 4 (Init -> Cod COMMENT .)
+
+
+state 19
+
+    (10) Lex -> % LITERALS . = STRING
+
+    =               shift and go to state 29
+
+
+state 20
+
+    (11) Lex -> % IGNORE . = STRING
+
+    =               shift and go to state 30
+
+
+state 21
+
+    (12) Lex -> % TOKENS . = LISTA
+
+    =               shift and go to state 31
+
+
+state 22
+
+    (13) Lex -> % STATES . = LISTA
+
+    =               shift and go to state 32
+
+
+state 23
+
+    (14) Lex -> % RESERVED . = DICIONARY
+
+    =               shift and go to state 33
+
+
+state 24
+
+    (18) Yacc -> % PRECEDENCE . = LISTA
+
+    =               shift and go to state 34
+
+
+state 25
+
+    (15) Lex -> STRING RETURN . ( ID , CODE )
+
+    (               shift and go to state 35
+
+
+state 26
+
+    (19) Yacc -> ID PRODUCTION . CODE
+
+    CODE            shift and go to state 36
+
+
+state 27
+
+    (16) Lex -> LEXERROR ( . STRING , CODE )
+
+    STRING          shift and go to state 37
+
+
+state 28
+
+    (21) Yacc -> YACCERROR ( . STRING , CODE )
+
+    STRING          shift and go to state 38
+
+
+state 29
+
+    (10) Lex -> % LITERALS = . STRING
+
+    STRING          shift and go to state 39
+
+
+state 30
+
+    (11) Lex -> % IGNORE = . STRING
+
+    STRING          shift and go to state 40
+
+
+state 31
+
+    (12) Lex -> % TOKENS = . LISTA
+
+    LISTA           shift and go to state 41
+
+
+state 32
+
+    (13) Lex -> % STATES = . LISTA
+
+    LISTA           shift and go to state 42
+
+
+state 33
+
+    (14) Lex -> % RESERVED = . DICIONARY
+
+    DICIONARY       shift and go to state 43
+
+
+state 34
+
+    (18) Yacc -> % PRECEDENCE = . LISTA
+
+    LISTA           shift and go to state 44
+
+
+state 35
+
+    (15) Lex -> STRING RETURN ( . ID , CODE )
+
+    ID              shift and go to state 45
+
+
+state 36
+
+    (19) Yacc -> ID PRODUCTION CODE .
+
+    COMMENT         reduce using rule 19 (Yacc -> ID PRODUCTION CODE .)
+    $end            reduce using rule 19 (Yacc -> ID PRODUCTION CODE .)
+
+
+state 37
+
+    (16) Lex -> LEXERROR ( STRING . , CODE )
+
+    ,               shift and go to state 46
+
+
+state 38
+
+    (21) Yacc -> YACCERROR ( STRING . , CODE )
+
+    ,               shift and go to state 47
+
+
+state 39
+
+    (10) Lex -> % LITERALS = STRING .
+
+    COMMENT         reduce using rule 10 (Lex -> % LITERALS = STRING .)
+    $end            reduce using rule 10 (Lex -> % LITERALS = STRING .)
+
+
+state 40
+
+    (11) Lex -> % IGNORE = STRING .
+
+    COMMENT         reduce using rule 11 (Lex -> % IGNORE = STRING .)
+    $end            reduce using rule 11 (Lex -> % IGNORE = STRING .)
+
+
+state 41
+
+    (12) Lex -> % TOKENS = LISTA .
+
+    COMMENT         reduce using rule 12 (Lex -> % TOKENS = LISTA .)
+    $end            reduce using rule 12 (Lex -> % TOKENS = LISTA .)
+
+
+state 42
+
+    (13) Lex -> % STATES = LISTA .
+
+    COMMENT         reduce using rule 13 (Lex -> % STATES = LISTA .)
+    $end            reduce using rule 13 (Lex -> % STATES = LISTA .)
+
+
+state 43
+
+    (14) Lex -> % RESERVED = DICIONARY .
+
+    COMMENT         reduce using rule 14 (Lex -> % RESERVED = DICIONARY .)
+    $end            reduce using rule 14 (Lex -> % RESERVED = DICIONARY .)
+
+
+state 44
+
+    (18) Yacc -> % PRECEDENCE = LISTA .
+
+    COMMENT         reduce using rule 18 (Yacc -> % PRECEDENCE = LISTA .)
+    $end            reduce using rule 18 (Yacc -> % PRECEDENCE = LISTA .)
+
+
+state 45
+
+    (15) Lex -> STRING RETURN ( ID . , CODE )
+
+    ,               shift and go to state 48
+
+
+state 46
+
+    (16) Lex -> LEXERROR ( STRING , . CODE )
+
+    CODE            shift and go to state 49
+
+
+state 47
+
+    (21) Yacc -> YACCERROR ( STRING , . CODE )
+
+    CODE            shift and go to state 50
+
+
+state 48
+
+    (15) Lex -> STRING RETURN ( ID , . CODE )
+
+    CODE            shift and go to state 51
+
+
+state 49
+
+    (16) Lex -> LEXERROR ( STRING , CODE . )
+
+    )               shift and go to state 52
+
+
+state 50
+
+    (21) Yacc -> YACCERROR ( STRING , CODE . )
+
+    )               shift and go to state 53
+
+
+state 51
+
+    (15) Lex -> STRING RETURN ( ID , CODE . )
+
+    )               shift and go to state 54
+
+
+state 52
+
+    (16) Lex -> LEXERROR ( STRING , CODE ) .
+
+    COMMENT         reduce using rule 16 (Lex -> LEXERROR ( STRING , CODE ) .)
+    $end            reduce using rule 16 (Lex -> LEXERROR ( STRING , CODE ) .)
+
+
+state 53
+
+    (21) Yacc -> YACCERROR ( STRING , CODE ) .
+
+    COMMENT         reduce using rule 21 (Yacc -> YACCERROR ( STRING , CODE ) .)
+    $end            reduce using rule 21 (Yacc -> YACCERROR ( STRING , CODE ) .)
+
+
+state 54
+
+    (15) Lex -> STRING RETURN ( ID , CODE ) .
+
+    COMMENT         reduce using rule 15 (Lex -> STRING RETURN ( ID , CODE ) .)
+    $end            reduce using rule 15 (Lex -> STRING RETURN ( ID , CODE ) .)
+

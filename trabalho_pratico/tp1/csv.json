@@ -1,0 +1,32 @@
+[
+    {
+        "Número": "a9898",
+        "Nome": "nome do gajo",
+        "Nota": [14, 12, 14],
+        "Nota_media": 13.333333333333334,
+        "Curso": "MIEI",
+        "Outras notas": [12, 12, 12],
+        "Outras notas_sum": 36,
+        "Outras notas_media": 12.0
+    },
+    {
+        "Número": "a9898",
+        "Nome": "nome do gajo",
+        "Nota": [14, 12, 14],
+        "Nota_media": 13.333333333333334,
+        "Curso": "MIEI",
+        "Outras notas": [12, 12],
+        "Outras notas_sum": 24,
+        "Outras notas_media": 12.0
+    },
+    {
+        "Número": "a9898",
+        "Nome": "nome do gajo",
+        "Nota": [14, 12, 14],
+        "Nota_media": 13.333333333333334,
+        "Curso": "MIEI",
+        "Outras notas": [12, 12, 1],
+        "Outras notas_sum": 25,
+        "Outras notas_media": 8.333333333333334
+    }
+]

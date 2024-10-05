@@ -1,0 +1,142 @@
+%% LEX
+
+%literals = "%=[]():{},."
+%tokens   = ["LEXSTART", "DICIONARY", "RESERVED", "YACCSTART", "LITERALS", "IGNORE", "TOKENS", "YACCERROR", "STRING", "LISTA", "RETURN", "LEXERROR", "PRECEDENCE", "COMMENT", "VARIABLE", "PRODUCTION", "LINE", "ID", "CODE", "PYTHON", "STATES"]
+%states = [("lex", "inclusive"),("yacc", "inclusive"),("python", "inclusive")]
+
+%ignore = " \t\n"
+%lex_ignore = " \t\n"
+%yacc_ignore = " \t\n"
+%python_ignore = ""
+
+"\#.*"                                                          return(COMMENT, <>)
+"(?i)%%\s*LEX\n?"                                               return(LEXSTART, <t.lexer.begin("lex")>)
+"(?i)%%\s*YACC\n?"                                              return(YACCSTART, <t.lexer.begin("yacc")>)
+"(?i)%%\s*PYTHON\n?"                                            return(PYTHON, <t.lexer.begin("python")>)
+"return"                                                        return(lex_RETURN, <>)
+"precedence"                                                    return(yacc_PRECEDENCE, <>)
+"(\w+_)?error"                                                  return(lex_LEXERROR, <>)
+"error"                                                         return(yacc_YACCERROR, <>)
+"literals"                                                      return(lex_LITERALS, <>)
+"reserved"                                                      return(lex_RESERVED, <>)
+"(\w+_)?ignore"                                                 return(lex_IGNORE, <>)
+"tokens"                                                        return(lex_TOKENS, <>)
+"states"                                                        return(lex_STATES, <>)
+"((f|r)?\"([^\\\"]*(\\\"|\\)?)+\")|(\"([^\\\"]*(\\\"|\\)?)+\")" return(STRING, <>)
+"<.*>"                                                          return(CODE, <t.value = re.search(r"<\s*(.*)>", t.value).group(1)|t.value = m_split(t.value, '|')>)
+"\[.*\]"                                                        return(LISTA, <>)
+"{.*}"                                                          return(DICIONARY, <>)
+"\s*:([^<\"\#]*(\".\")?)+"                                      return(yacc_PRODUCTION, <>)
+"\w+"                                                           return(ID, <>)
+"\w+\s*=\s*[^\n\#]*"                                            return(yacc_VARIABLE, <>)
+"(.|\s|\t|\n)+"                                                 return(python_LINE, <if re.match(r"\n", t.value): |    return None|elif re.match(r"(?i)%%\s*LEX\n?", t.value):|    t.lexer.begin("lex")|    t.type = "LEXSTART"|elif re.match(r"(?i)%%\s*YACC\n?", t.value):|    t.lexer.begin("yacc")|    t.type = "YACCSTART"|elif not re.match(r"\t|\s", t.value):|    t.value = "\n" + t.value>)
+
+error       (f"Illegal character '{t.value[0]}', [{t.lexer.lineno}]", <t.lexer.skip(1)>)
+lex_error   (f"Illegal character '{t.value[0]}', [{t.lexer.lineno}]", <t.lexer.skip(1)>)
+yacc_error  (f"Illegal character '{t.value[0]}', [{t.lexer.lineno}]", <t.lexer.skip(1)>)
+python_error(f"Illegal character '{t.value[0]}', [{t.lexer.lineno}]", <t.lexer.skip(1)>)
+
+
+%% YACC
+
+Z : Init                                      <>
+Init : Cod                                    <>
+Init : COMMENT                                <>
+Init : Cod COMMENT                            <>
+Init :                                        <>
+Cod : Lex                                     <parser.lex.append(t[1] + "\n")>
+Cod : Yacc                                    <parser.yacc.append(t[1] + "\n")>
+Cod : Python                                  <parser.python.append(t[1])>
+Lex : LEXSTART                                <t[0] = "# LEXER\nimport ply.lex as lex\n">
+Lex : '%' LITERALS '=' STRING                 <t[0] = "literals = " + t[4] + "\n">
+Lex : '%' IGNORE '=' STRING                   <t[0] = "t_" + t[2] + " = " + t[4] + "\n">
+Lex : '%' TOKENS '=' LISTA                    <t[0] = "tokens = " + t[4] + "\n">
+Lex : '%' STATES '=' LISTA                    <t[0] = "states = " + t[4] + "\n">
+Lex : '%' RESERVED '=' DICIONARY              <t[0] = "reserved = " + t[4] + "\n">
+Lex : STRING RETURN '(' ID ',' CODE ')'       <t[0] = "def t_" + t[4] + "(t):\n\tr" + t[1] + get_code(t[6], "\n\t") + "return t\n">
+Lex : LEXERROR '(' STRING ',' CODE ')'        <if t[3] != "\"\"": prt = "\n\tprint(" + t[3] + ")"|else: prt = ""|t[0] = "def t_" + t[1] + "(t):" + prt + get_code(t[5], "\n\t")>
+Yacc : YACCSTART                              <t[0] = "# YACC\nimport ply.yacc as yacc\n">
+Yacc : '%' PRECEDENCE '=' LISTA               <t[0] = "precedence = " + t[4] + "\n">
+Yacc : ID PRODUCTION CODE                     <t[0] = "def p_" + t[1] + "_" + str(parser.count) + "(t):\n\t\" " + t[1] + " " + re.sub(r' +', ' ', t[2]) + "\"" + get_code(t[3],"\n\t")|parser.count = parser.count + 1>
+Yacc : VARIABLE                               <t[0] = t[1] + "\n">
+Yacc : YACCERROR '(' STRING ',' CODE ')'      <if t[3] != "\"\"": prt = "\n\tprint(" + t[3] + ")"|else: prt = ""|t[0] = "def p_error(t):" + prt + get_code(t[5], "\n\t")>
+Python : PYTHON                               <t[0] = "# PYTHON\n">
+Python : LINE                                 <t[0] = t[1]>
+
+error("", <print(t)>)
+
+%% PYTHON
+
+import sys
+import re
+
+def m_split(string, sep):
+    on_string = False
+    aspa = None
+    for i, c in enumerate(string):
+        if on_string:
+            if c == sep:
+                string = string[:i] + '«' + string[i+1:]
+            if c == '\"' and aspa == '\"':
+                on_string = False
+                aspa = None
+            elif c == '\'' and aspa == '\'':
+                on_string = False
+                aspa = None
+        else:
+            if c == '\"':
+                on_string = True
+                aspa = '\"'
+            elif c == '\'':
+                on_string = True
+                aspa = '\''
+    lista = string.split(sep)
+    for i, elem in enumerate(lista):
+        lista[i] = elem.replace('«', sep)
+    return lista
+
+def get_code(l, join):
+	if len(l) == 0: 
+		return join
+	code = join
+	for v in l:
+		if v != '':
+			code = code + v + join
+	return code
+
+def run(inp, out):
+
+	parser.count  = 0
+	parser.lex    = []
+	parser.yacc   = []
+	parser.python = []
+
+	for line in inp:
+		parser.parse(line)
+
+	for line in parser.lex:
+		out.write(line)
+	out.write("lexer = lex.lex()\n\n")
+
+	for line in parser.yacc:
+		out.write(line)
+	out.write("parser = yacc.yacc()\n\n")
+
+	for line in parser.python:
+		out.write(line)
+
+def main():
+	if len(sys.argv) == 1:
+		run(sys.stdin, sys.stdout)
+	elif len(sys.argv) == 2:
+		out = open(sys.argv[1], "w", encoding="utf-8")
+		run(sys.stdin, out)
+		out.close()
+	else:
+		inp = open(sys.argv[1], "r", encoding="utf-8")
+		out = open(sys.argv[2], "w", encoding="utf-8")
+		run(inp, out)
+		inp.close()
+		out.close()
+
+main()
